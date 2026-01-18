@@ -1,0 +1,165 @@
+# 🤖 LLM Evaluator
+
+A Streamlit-based web application for testing and evaluating Large Language Model responses using Exact Match, F1 Token Overlap, and ROUGE-L metrics. Compare multiple LLM models (Groq and Gemini) with reference-based evaluation for Question Answering tasks.
+
+## Features
+
+- **Multi-Model Support**: Test responses from multiple LLM providers
+  - Groq: Llama 3.3 70B, Llama 3.1 8B, Qwen 3 32B
+  - Google: Gemini 2.5 Flash
+- **Question Answering Evaluation**: Context-based and closed-book QA testing
+- **Automated Metrics**: Exact Match, F1 Token Overlap, and ROUGE-L calculation
+- **Response History**: Track and compare multiple model outputs
+- **Analytics Dashboard**: Visualize model performance with charts
+- **Export Results**: Download evaluation data as CSV
+
+## Quick Start
+
+### Prerequisites
+
+- Python 3.8 or higher
+- Free API keys:
+  - [Groq API Key](https://console.groq.com) (free, no credit card)
+  - [Google Gemini API Key](https://ai.google.dev/gemini-api/docs)
+
+### Installation
+
+1. **Clone the repository**
+```bash
+git clone <your-repo-url>
+cd LLMeval
+```
+
+2. **Create virtual environment**
+```bash
+python -m venv venv
+```
+
+3. **Activate virtual environment**
+```bash
+# Windows
+.\venv\Scripts\Activate.ps1
+
+# Mac/Linux
+source venv/bin/activate
+```
+
+4. **Install dependencies**
+```bash
+pip install -r requirements.txt
+```
+
+5. **Configure API keys**
+
+Create a `.env` file in the project root:
+```env
+GROQ_API_KEY=your_groq_api_key_here
+GEMINI_API_KEY=your_gemini_api_key_here
+```
+
+### Run the Application
+
+```bash
+streamlit run app.py
+```
+
+The app will open at `http://localhost:8501`
+
+## 📖 Usage
+
+### 1. Generate Response
+
+- Select a model from the sidebar
+- Enter optional **Context** (background information)
+- Enter your **Question**
+- Add **Ground Truth** (reference answer for evaluation)
+- Adjust temperature and max tokens if needed
+- Click **Generate Response**
+
+### 2. Evaluate Response
+
+- Go to the **Evaluate Response** tab
+- Select a previously generated response
+- Review the stored ground truth (or edit it)
+- Click **Evaluate** to compute:
+  - **Exact Match**: 1 if answer matches reference exactly (case/punctuation normalized), 0 otherwise
+  - **F1 Token Overlap**: Harmonic mean of precision and recall at token level (0-1)
+  - **ROUGE-L**: Longest common subsequence similarity (0-1, higher is better)
+
+### 3. View Analytics
+
+- Go to the **Analytics** tab
+- View evaluation summary table
+- Compare models with bar charts
+- Download results as CSV
+
+## Evaluation Metrics
+
+### Exact Match (0 or 1)
+- Binary metric: 1 if the normalized answer exactly matches the reference, 0 otherwise
+- Normalization: lowercase, remove punctuation, strip whitespace
+- **Strictest metric** - requires perfect match
+- Common in QA benchmarks (SQuAD, TriviaQA)
+
+### F1 Token Overlap (0-1)
+- Measures token-level overlap between candidate and reference
+- Computes precision (correct tokens / total candidate tokens) and recall (correct tokens / total reference tokens)
+- F1 = harmonic mean of precision and recall: 2 * (P * R) / (P + R)
+- **More lenient than Exact Match** - rewards partial matches
+- **0.7-1.0**: Excellent overlap
+- **0.4-0.7**: Good overlap
+- **0.0-0.4**: Poor overlap
+
+### ROUGE-L (0-1)
+- Measures Longest Common Subsequence between candidate and reference
+- Considers word order (unlike F1 which treats answer as bag of words)
+- Higher scores indicate better similarity
+- **Balances precision and recall** while respecting sequence
+
+## Tech Stack
+
+- **Frontend**: Streamlit
+- **LLM APIs**: Groq, Google Gemini
+- **Evaluation**: Custom Exact Match & F1, rouge-score (ROUGE-L)
+- **Data Processing**: pandas
+- **Environment**: python-dotenv
+
+## Project Structure
+
+```
+LLMeval/
+├── app.py                 # Main Streamlit application
+├── check_models.py        # Utility to verify available models
+├── requirements.txt       # Python dependencies
+├── .env                   # API keys (not committed)
+├── SETUP.md              # Detailed setup guide
+└── README.md             # This file
+```
+
+## 🎯 Use Cases
+
+- **Model Comparison**: Test the same question across multiple models
+- **QA System Evaluation**: Evaluate question-answering accuracy
+- **Research**: Benchmark different models with reference answers
+- **Education**: Learn about LLM evaluation metrics
+
+## 🔍 Example Workflow
+
+1. **Question**: "What is the capital of France?"
+2. **Context**: (optional) "France is a country in Western Europe..."
+3. **Ground Truth**: "Paris"
+4. **Model Response**: "The capital of France is Paris."
+5. **Evaluation**:
+   - Exact Match: 0 (not an exact match after normalization)
+   - F1 Token Overlap: 0.25 (1 out of 6 tokens matches)
+   - ROUGE-L: 0.25 (partial sequence match)
+
+## 📝 Future Enhancements
+
+- [ ] Add more task types (Summarization, Translation, Paraphrase)
+- [ ] Support for reference-free metrics (Perplexity, BERTScore)
+- [ ] Batch evaluation from CSV
+- [ ] Multi-turn conversation evaluation
+- [ ] More LLM providers (Anthropic Claude, OpenAI)
+
+
