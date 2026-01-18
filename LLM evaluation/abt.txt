@@ -132,7 +132,6 @@ LLMeval/
 ├── check_models.py        # Utility to verify available models
 ├── requirements.txt       # Python dependencies
 ├── .env                   # API keys (not committed)
-├── SETUP.md              # Detailed setup guide
 └── README.md             # This file
 ```
 
