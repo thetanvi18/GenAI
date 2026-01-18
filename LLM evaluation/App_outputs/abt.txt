@@ -1,1 +1,5 @@
 Here you will find sample outputs of the streamlit app.
+See the images sequentially: 
+1)response_generation
+2)response_evaluation
+3)analytics
