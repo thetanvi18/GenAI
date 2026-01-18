@@ -1,0 +1,6 @@
+streamlit
+groq
+google-generativeai
+python-dotenv
+nltk
+rouge-score
